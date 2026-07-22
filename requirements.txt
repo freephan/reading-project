@@ -1,3 +1,7 @@
-git add .
-git commit -m "독서 프로젝트 기본 파일 복구"
-git push
+requests
+pandas
+openpyxl
+sqlalchemy
+psycopg[binary]
+python-dotenv
+streamlit
