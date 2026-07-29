@@ -1,3 +1,38 @@
+from pathlib import Path
+import pandas as pd
+import streamlit as st
+
+ERROR_FILE = Path("data/output/books_errors.csv")
+
+if ERROR_FILE.exists():
+    try:
+        error_df = pd.read_csv(ERROR_FILE, dtype=str).fillna("")
+
+        if not error_df.empty:
+            st.warning(
+                f"⚠️ 구글 도서 정보를 가져오지 못한 ISBN이 "
+                f"{len(error_df)}건 있습니다."
+            )
+
+            with st.expander("가져오지 못한 책 확인"):
+                st.dataframe(
+                    error_df,
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+                st.download_button(
+                    label="오류 목록 CSV 다운로드",
+                    data=error_df.to_csv(index=False).encode("utf-8-sig"),
+                    file_name="books_errors.csv",
+                    mime="text/csv",
+                )
+
+    except pd.errors.EmptyDataError:
+        pass
+    except Exception as e:
+        st.error(f"오류 목록을 읽지 못했습니다: {e}")
+        
 import os
 
 import pandas as pd
